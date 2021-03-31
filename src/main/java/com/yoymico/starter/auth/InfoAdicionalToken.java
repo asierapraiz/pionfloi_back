@@ -3,6 +3,7 @@ package com.yoymico.starter.auth;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -29,6 +30,7 @@ public class InfoAdicionalToken implements TokenEnhancer {
 		info.put ( "nombre" , usuario.getNombre ( ) );
 		info.put ( "apellido" , usuario.getApellido ( ) );
 		info.put ( "email" , usuario.getEmail ( ) );
+		info.put ( "id" , usuario.getId( ) );
 
 		( ( DefaultOAuth2AccessToken ) accessToken ).setAdditionalInformation ( info );
 

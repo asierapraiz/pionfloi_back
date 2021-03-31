@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.yoymico.starter.models.entity.Avatar;
+import com.yoymico.starter.models.entity.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -46,9 +48,17 @@ public class UsuarioController {
 	@Autowired
 	private EmailService mailService;
 
+	@ GetMapping ( "/usuarios" )
+	public List<Usuario> index( ) {
+		return usuarioService.findAll ( );
+	}
+
 	@PostMapping( "/usuario" )
 	public ResponseEntity<?> create( @RequestBody Usuario usuario, BindingResult result ) {
 
+		Avatar avatar = new Avatar(null, null, null, null, null, null, null);
+
+		usuario.setAvatar(avatar);
 		Usuario nuevoUsuario = usuario;
 		nuevoUsuario.setPassword ( passwordEncoder.encode ( usuario.getPassword ( ) ) );
 		nuevoUsuario.setEnabled ( true );
@@ -126,6 +136,7 @@ public class UsuarioController {
 			return new ResponseEntity<Map<String, Object>> ( response , HttpStatus.INTERNAL_SERVER_ERROR );
 		}
 	}
+
 
 	/*
 		//@GetMapping( "/sendMail" )

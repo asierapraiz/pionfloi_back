@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.yoymico.starter.models.entity.Cliente;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,11 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
 	}
 
 	@Override
+	public Usuario findById(Long id) {
+		return usuarioDao.findById(id).get();
+	}
+
+	@Override
 	@Transactional( readOnly = true )
 	public Usuario findByUsername( String username ) {
 		return usuarioDao.findByUsername ( username );
@@ -71,8 +77,10 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
 		usuario.setRoles ( roles );
 		usuarioDao.save ( usuario );
 		return null;
-
 	}
+
+
+
 
 	@Override
 	@Transactional( readOnly = true )
@@ -84,6 +92,16 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
 	public void savePasswordResetTokenForUser( Usuario user, String token ) {
 		PasswordResetToken myToken = new PasswordResetToken ( token , user );
 		passwordResetTokenDao.save ( myToken );
+	}
+
+	@Override
+	public Usuario save(Usuario usuario) {
+		return usuarioDao.save ( usuario );
+	}
+
+	@Override
+	public List<Usuario> findAll() {
+		return usuarioDao.findAll();
 	}
 
 	@Override

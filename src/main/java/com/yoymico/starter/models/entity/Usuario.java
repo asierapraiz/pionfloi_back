@@ -1,23 +1,13 @@
 package com.yoymico.starter.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -47,6 +37,17 @@ public class Usuario implements Serializable {
 			@UniqueConstraint( columnNames = { "usuario_id", "role_id" } ) } )
 	private List<Role> roles;
 
+	@JsonIgnoreProperties(value={"avatar", "hibernateLazyInitializer", "handler"}, allowSetters=true)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "avatar_id",  referencedColumnName = "id")
+	private Avatar avatar;
+
+
+	//@JsonIgnoreProperties(value={"tareas", "hibernateLazyInitializer", "handler"}, allowSetters=true)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id")
+	private List<Reto> retos;
+
 	@NotNull( message = "no puede estar vacio" )
 	@Column( name = "create_at" )
 	@Temporal( TemporalType.DATE )
@@ -54,6 +55,8 @@ public class Usuario implements Serializable {
 
 	@Column( name = "reset_password_token", length = 30 )
 	private String resetPasswordToken;
+
+
 
 	public Date getCreateAt( ) {
 		return createAt;
@@ -127,8 +130,24 @@ public class Usuario implements Serializable {
 		this.email = email;
 	}
 
+	public Avatar getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(Avatar avatar) {
+		this.avatar = avatar;
+	}
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	public List<Reto> getRetos() {
+		return retos;
+	}
+
+	public void setRetos(List<Reto> retos) {
+		this.retos = retos;
+	}
 }
